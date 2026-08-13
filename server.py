@@ -5,16 +5,16 @@ import io
 import soundfile as sf
 import numpy as np
 
-# Правильний імпорт chatterbox
+# Правильний імпорт Chatterbox TTS
 from chatterbox.tts import ChatterboxTTS
 
 app = FastAPI()
 
-# Завантажуємо норвезьку модель (спеціальна версія для норвезької)
 print("Loading Norwegian TTS model...")
 try:
-    # "akhbar/chatterbox-tts-norwegian" – доопрацьована для норвезької
-    tts = ChatterboxTTS(model_name="akhbar/chatterbox-tts-norwegian")
+    # Просто створюємо екземпляр – він сам завантажить модель
+    # Модель підтримує норвезьку за замовчуванням
+    tts = ChatterboxTTS()
     print("✅ Model loaded successfully!")
 except Exception as e:
     print(f"❌ Failed to load model: {e}")
@@ -30,7 +30,7 @@ async def speech(request: TTSRequest):
     if tts is None:
         raise HTTPException(status_code=503, detail="TTS model not loaded")
     try:
-        # Генеруємо аудіо (повертає numpy масив)
+        # Генеруємо аудіо
         audio = tts.synthesize(request.input)
         
         # Конвертуємо в MP3
